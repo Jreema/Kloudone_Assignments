@@ -1,0 +1,140 @@
+#######################################################################
+#uberCars.py
+#######################################################################
+class Car:
+    """ Car is the baseclass. It contains a method to calculate the fare. Car types derive from this class"""
+    def __init__(self):
+        pass
+    speed = 0
+    distance_covered =0
+    rate =0
+    #function to set the distance travelled
+    def set_distance(self,dist):
+        self.distance_covered=dist
+    #function to calculate fare
+    def fare(self):
+         return self.rate*self.distance_covered
+    
+class Sedan(Car):
+    """Car Type is Sedan. Subclass of Car. Has a rate of Rs.12 per Km"""
+    car_type ="Sedan"
+    def __init__(self):
+        print("Sedan has been alloted to you.")
+        self.rate= 12
+        self.speed=40
+
+class Mini(Car):
+    """Car Type is Mini. Subclass of Car. Has a rate of Rs.10 per Km"""
+    car_type ="Mini"
+    def __init__(self):
+        print("Mini has been alloted to you")
+        self.rate= 10 
+        self.speed=40
+        
+class Limo(Car):
+    """Car Type is Limousine. Subclass of Car. Has a rate of Rs.35 per Km"""
+    car_type ="Limousine"
+    def __init__(self):
+        print("Limo has been alloted to you")
+        self.rate= 35
+        self.speed=40
+
+class Innova(Car):
+    """Car Type is Innova. Subclass of Car. Has a rate of Rs.24 per Km"""
+    car_type ="Innova"
+    def __init__(self):
+        print("Innova has been alloted to you")
+        self.rate= 24
+        self.speed=40
+
+class Indica(Car):
+    """Car Type is Indica. Subclass of Car. Has a rate of Rs.12 per Km"""
+    car_type ="Indica"
+    def __init__(self):
+        print("Indica has been alloted to you")
+        self.rate= 12
+        self.speed=40
+
+class UberShare(Car):
+    """Car Type is UberShare. Subclass of Car. Has a rate of Rs.5 per Km"""
+    car_type ="UberShare"
+    def __init__(self):
+        print("UberShare has been alloted to you")
+        self.rate= 5
+        self.speed=40
+
+####################################################
+#trip.py
+#####################################################
+#imports the various cars from uberCars
+from uberCars import Sedan,Mini,Limo,Innova,Indica,UberShare
+
+class Main_trip:
+    #constructor assigns the id, starting place and destination of the trip.
+    def __init__(self,ident,start,stop):
+        self.id = ident
+        self.start = start
+        self.destination = stop
+        self.status = "In Progress"
+    
+    #Creates an object by callling the appropriate subclass of car object
+    def choose_car(self,car_name):
+        str1= car_name + "()"
+        self.car= eval(str1) #evaluates the expression
+    
+    #updates the status of the ride
+    def end_ride(self):
+        self.status ="Ride Ended"
+
+#####################################################
+#Main.py
+#####################################################
+import trip
+car_dict = {"1":"Sedan","2":"Mini","3":"Limo","4":"Innova","5":"Indica","6":"UberShare"}
+loop = True
+trip_id=100
+id1=0
+st_trip = []
+while(loop):
+    choose_menu = input("Enter a choice:\t1. Book a Ride\t2. Calculate Fare & End a Ride\t3. Get Status of a Ride\t4. Exit\n")
+    if(choose_menu not in ['1','2','3','4']):
+        print("Invalid Input Given")
+        exit(0)
+    if choose_menu=='1':
+        car_choice= input("Choose a car:\t1.Sedan\t2.Mini\t3.Limo\t4.Innova\t5.Indica\t6.UberShare\n") 
+        if car_choice not in ['1','2','3','4','5','6']:
+            print("Invalid Choice Entered")
+            exit(0)
+        start = input("Enter Starting Place: ")
+        stop = input("Enter Destination: ")
+        st_trip.append(trip.Main_trip(trip_id,start,stop))
+        st_trip[id1].choose_car(car_dict[car_choice])
+        print("Your trip has started")
+        print("Your trip id is: ",st_trip[id1].id)
+        id1 += 1
+        trip_id +=1
+        c=input()
+    elif choose_menu =='2':
+        query_id1 = int(input("Enter the trip id: "))
+        id2 = query_id1-100
+        dist =int(input("Enter the distance travelled: "))
+        st_trip[id2].car.set_distance(dist)
+        print("Your Trip id is: %d"%(st_trip[id2].id))
+        print("Vehicle used: "+st_trip[id2].car.car_type)
+        print("Your Starting Place: "+ st_trip[id2].start)
+        print("Your Destination: "+ st_trip[id2].destination)
+        print("Your fare is: Rs.",end='')
+        print(st_trip[id2].car.fare())
+        st_trip[id2].end_ride()
+        print("Ride Ended")
+        c=input()
+    elif choose_menu=='3':
+        query_id2 = int(input("Enter your Trip id: "))
+        id3 = query_id2 -100
+        print("The vehicle is: "+st_trip[id3].car.car_type)
+        print("The Starting Place of your ride is: "+st_trip[id3].start)
+        print("The Destination of your ride is: "+st_trip[id3].destination)
+        print("The Status of your ride is: "+st_trip[id3].status)
+        c =input()
+    else:
+        loop = False
